@@ -1,5 +1,3 @@
-chown -R www-data:www-data faveo-helpdesk
-
 FROM nginx
 
 MAINTAINER Himanshu Verma <himanshu@attabot.io>
@@ -10,7 +8,7 @@ RUN apt-get update -y \
     && apt-get install -y \
         curl \
         cron \
-        #git \
+        git \
         php7.0-fpm \
         php7.0-mcrypt \
         php7.0-intl \
