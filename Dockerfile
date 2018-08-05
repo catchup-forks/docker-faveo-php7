@@ -1,3 +1,4 @@
+# This package gets nginx from debian stretch distribution
 FROM nginx
 
 MAINTAINER Himanshu Verma <himanshu@attabot.io>
@@ -53,7 +54,10 @@ WORKDIR /usr/share/nginx/
 #RUN rm -rf *
 
 # Clone the project from git
-RUN git clone --depth 1 https://github.com/ladybirdweb/faveo-helpdesk.git -b clean_dev . && composer install
+RUN rm -rf *
+RUN git clone https://github.com/ladybirdweb/faveo-helpdesk.git .
+RUN composer install
+
 
 #RUN chgrp -R www-data . storage bootstrap/cache
 #RUN chmod -R ug+rwx . storage bootstrap/cache
