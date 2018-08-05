@@ -20,18 +20,23 @@ RUN apt update
 
 
 # Install necessary packages 
+RUN apt-get install --no-install-recommends --no-install-suggests -y gnupg1 apt-transport-https ca-certificates curl cron git php7.1-common php7.1-readline php7.1-fpm php7.1-cli php7.1-gd php7.1-dev php7.1-imap php7.1-intl php7.1-mysql php7.1-mcrypt php7.1-curl php7.1-xml php7.1-zip php7.1-mbstring php-xdebug php7.1-opcache php7.1-json \
+   && rm -rf /var/lib/apt/lists/*
+
+
 #RUN apt-get update -y \
-#    && apt-get install --no-install-recommends --no-install-suggests -y gnupg1 #apt-transport-https ca-certificates curl cron git php7.1-fpm php7.1-cli php7.1-dev #php7.1-sqlite3 php7.1-gd php-apcu php7.1-curl php7.1-mcrypt php7.1-imap php7.1-intl #php7.1-mysql php7.1-readline php-xdebug php-common php7.1-mbstring php7.1-xml #php7.1-zip php-pear php7.1-xdebug \
+#php7.1-fpmphp7.1-cliphp7.1-mcryptphp7.1-curl
+#    && apt-get install --no-install-recommends --no-install-suggests -y gnupg1 #apt-transport-https ca-certificates curl cron git   php7.1-dev #php7.1-sqlite3 php7.1-gd php-apcu   php7.1-imap php7.1-intl #php7.1-mysql php7.1-readline php-xdebug php-common php7.1-mbstring php7.1-xml #php7.1-zip php-pear php7.1-xdebug \
 #    && rm -rf /var/lib/apt/lists/*
 
-#RUN phpenmod mcrypt
+RUN phpenmod mcrypt
 
 # Ensure that PHP7 FPM is run as root.
-#RUN service php7.1-fpm start
+RUN service php7.1-fpm start
 
 
-#RUN curl -sS https://getcomposer.org/installer | php -- --disable-tls \
-#    && mv composer.phar /usr/local/bin/composer
+RUN curl -sS https://getcomposer.org/installer | php -- --disable-tls \
+    && mv composer.phar /usr/local/bin/composer
 
 #RUN sed -i 's/user  nginx/user  www-data/g' /etc/nginx/nginx.conf
 
@@ -48,7 +53,7 @@ RUN apt update
 
 WORKDIR /usr/share/nginx/
 
-#RUN rm -rf *
+RUN rm -rf *
 
 # Clone the project from git
 #RUN rm -rf *
