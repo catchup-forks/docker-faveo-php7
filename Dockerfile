@@ -99,6 +99,8 @@ RUN chmod -R ug+rwx . storage bootstrap/cache
 
 VOLUME /usr/share/nginx/
 
+EXPOSE 80/tcp 9000/tcp
+
 #CMD cron \
 #    && service php7.1-fpm start \
 #    && nginx -g "daemon off;"
