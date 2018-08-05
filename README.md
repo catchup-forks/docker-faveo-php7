@@ -1,5 +1,13 @@
 ### Docker file for Faveo Helpdesk
 
+###  Extra ###
+So, the image built, the image is running, try to access it with an ip address
+I did docker inspect (image-name) and it gave me an ip.
+Don't think the ports are exposed yet.
+
+To be continued.
+
+
 With this Docker file you can build a Docker image for Faveo Helpdesk
 
 ### How to use
