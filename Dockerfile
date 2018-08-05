@@ -55,7 +55,8 @@ WORKDIR /usr/share/nginx/
 
 # Clone the project from git
 RUN rm -rf *
-RUN git clone https://github.com/ladybirdweb/faveo-helpdesk.git .
+# This *WILL* work, but we need PHP 7.1 for it
+RUN git clone --depth 1 https://github.com/ladybirdweb/faveo-helpdesk.git -b clean-dev .
 RUN composer install
 
 
