@@ -19,7 +19,7 @@ services:
      container_name: faveo
      depends_on:
        - mysql
-     image: cleansoftware/docker-faveo-php7:php7.0
+     image: cleansoftware/docker-faveo-php7:php7.1
      ports:
        - "80:80"
      restart: always
