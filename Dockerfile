@@ -31,14 +31,31 @@ RUN apt-get install --no-install-recommends --no-install-suggests -y gnupg1 apt-
 
 RUN phpenmod mcrypt
 
+
+# Change few default PHP settings:
+RUN sed -i "s/memory_limit = .*/memory_limit = 256M/" /etc/php/7.1/fpm/php.ini
+RUN sed -i "s/upload_max_filesize = .*/upload_max_filesize = 128M/" /etc/php/7.1/fpm/php.ini
+RUN sed -i "s/zlib.output_compression = .*/zlib.output_compression = on/" /etc/php/7.1/fpm/php.ini
+RUN sed -i "s/max_execution_time = .*/max_execution_time = 18000/" /etc/php/7.1/fpm/php.ini
+
+
 # Ensure that PHP7 FPM is run as root.
 RUN service php7.1-fpm start
+
+# RUN systemctl restart php7.1-fpm 
+
+# Create extra virtualhost Nginx server block
+# ADD example.com.conf /etc/nginx/sites-enabled/example.com.conf
+# RUN ln -s /etc/nginx/sites-available/example.com /etc/nginx/sites-enabled/example.com
 
 
 RUN curl -sS https://getcomposer.org/installer | php -- --disable-tls \
     && mv composer.phar /usr/local/bin/composer
 
 #RUN sed -i 's/user  nginx/user  www-data/g' /etc/nginx/nginx.conf
+
+RUN mkdir -p /var/www/html/example.com
+RUN chown www-data: -R /var/www/html/example.com
 
 
 # Force PHP to log to nginx
@@ -48,22 +65,27 @@ RUN curl -sS https://getcomposer.org/installer | php -- --disable-tls \
 #        && ln -sf /dev/stderr /var/log/nginx/error.log
 
 # Enable php by default
-#RUN rm -rf /etc/nginx/conf.d/default.conf
-#ADD default.conf /etc/nginx/conf.d/default.conf
+RUN rm -rf /etc/nginx/conf.d/default.conf
+ADD default.conf /etc/nginx/conf.d/default.conf
 
 WORKDIR /usr/share/nginx/
 
 RUN rm -rf *
 
 # Clone the project from git
-#RUN rm -rf *
+RUN rm -rf *
 # This *WILL* work, but we need PHP 7.1 for it
-#RUN git clone --depth 1 https://github.com/ladybirdweb/faveo-helpdesk.git -b #clean-dev .
-#RUN composer install
+RUN git clone --depth 1 https://github.com/ladybirdweb/faveo-helpdesk.git -b clean-dev .
+
+RUN rm -rf /usr/share/nginx/vendor/bin/*
+
+#RUN mkdir /usr/share/nginx/vendor/bin/doctrine-dbal
+#RUN chown www-data: -R /usr/share/nginx/
+RUN composer update
 
 
-#RUN chgrp -R www-data . storage bootstrap/cache
-#RUN chmod -R ug+rwx . storage bootstrap/cache
+RUN chgrp -R www-data . storage bootstrap/cache
+RUN chmod -R ug+rwx . storage bootstrap/cache
 
 # Add to crontab file
 #RUN touch /etc/cron.d/faveo-cron
@@ -72,6 +94,8 @@ RUN rm -rf *
 #RUN crontab /etc/cron.d/faveo-cron
 #RUN sed -i "s/max_execution_time = .*/max_execution_time = 120/" /etc/php/7.1/fpm/php.ini \
 #    && sed -i "s/php_admin_value\[max_execution_time\] = .*/php_admin_value[max_execution_time] = 300/" /etc/php/7.1/fpm/pool.d/www.conf
+
+
 
 VOLUME /usr/share/nginx/
 
